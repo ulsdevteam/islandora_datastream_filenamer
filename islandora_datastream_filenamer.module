@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Primary hook implementations.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_datastream_filenamer_menu() {
+  $items['admin/islandora/tools/islandora_datastream_filenamer'] = array(
+    'title' => 'Islandora Datastream Filenamer',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_datastream_filenamer_admin_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'includes/admin.form.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function islandora_datastream_filenamer_token_info() {
+  $info['types']['dsfilename'] = array(
+    'name' => 'Datastream tokens',
+    'description' => t("Tokens for islandora relating to datastreams objects."),
+  );
+  $info['tokens']['dsfilename']['fileextension'] = array(
+    'name' => t("Extension from Datastream's Mimetype"),
+    'description' => t("File extension derived from mimetype."),
+  );
+  $info['tokens']['dsfilename']['id'] = array(
+    'name' => t("Datastream's ID"),
+    'description' => t('Datastream ID.'),
+  );
+  $info['tokens']['dsfilename']['label'] = array(
+    'name' => t("Datastream's label"),
+    'description' => t("Datastream label."),
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function islandora_datastream_filenamer_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  if ($type == 'dsfilename' && !empty($data['datastream'])) {
+    $datastream = $data['datastream'];
+    $replacements = array();
+    foreach ($tokens as $name => $original) {
+      if ($name == 'fileextension') {
+        $replacements[$original] = islandora_get_extension_for_mimetype($datastream->mimetype);
+      }
+      if ($datastream) {
+        if ($name == 'id') {
+          $replacements[$original] = $datastream->id;
+        }
+        if ($name == 'label') {
+          $replacements[$original] = $datastream->label;
+        }
+      }
+    }
+    return $replacements;
+  }
+  return array();
+}
+
+function islandora_datastream_filenamer_create_datastream_filename($datastream) {
+  $s = token_replace(variable_get('islandora_ds_download_filename_pattern'),
+    array('datastream'=>$datastream,
+      'fedora' => $datastream->parent),
+    array('clear' => TRUE)
+  );
+}

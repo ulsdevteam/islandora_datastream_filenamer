@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install/uninstall hooks.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_datastream_filenamer_uninstall() {
+  variable_del('islandora_ds_download_filename_pattern');
+}

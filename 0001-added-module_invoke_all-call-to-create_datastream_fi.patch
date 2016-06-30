@@ -1,0 +1,32 @@
+From 3610e0036d069b29c4a19cbb44f6ef5c1a567bfc Mon Sep 17 00:00:00 2001
+From: Brian Gillingham <bgilling@pitt.edu>
+Date: Thu, 30 Jun 2016 20:35:37 +0000
+Subject: [PATCH] added module_invoke_all call to create_datastream_filename in
+ routine that names file downloads
+
+---
+ includes/datastream.inc | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/includes/datastream.inc b/includes/datastream.inc
+index 18bc509..a78066e 100644
+--- a/includes/datastream.inc
++++ b/includes/datastream.inc
+@@ -59,9 +59,11 @@ function islandora_view_datastream(AbstractDatastream $datastream, $download = F
+     $duplicate_extension_position = strlen($label) > $extension_length ?
+       strripos($label, $extension, -$extension_length) :
+       FALSE;
+-    $filename = $label;
+-    if ($duplicate_extension_position === FALSE) {
+-      $filename .= $extension;
++    if (!($filename = module_invoke_all('create_datastream_filename', $datastream))) {
++      $filename = $label;
++      if ($duplicate_extension_position === FALSE) {
++        $filename .= $extension;
++      }
+     }
+     header("Content-Disposition: attachment; filename=\"$filename\"");
+   }
+-- 
+1.9.1
+
