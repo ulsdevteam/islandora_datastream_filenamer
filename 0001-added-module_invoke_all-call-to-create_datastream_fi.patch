@@ -12,14 +12,18 @@ diff --git a/includes/datastream.inc b/includes/datastream.inc
 index 18bc509..a78066e 100644
 --- a/includes/datastream.inc
 +++ b/includes/datastream.inc
-@@ -59,9 +59,11 @@ function islandora_view_datastream(AbstractDatastream $datastream, $download = F
+@@ -59,9 +59,15 @@ function islandora_view_datastream(AbstractDatastream $datastream, $download = F
      $duplicate_extension_position = strlen($label) > $extension_length ?
        strripos($label, $extension, -$extension_length) :
        FALSE;
 -    $filename = $label;
 -    if ($duplicate_extension_position === FALSE) {
 -      $filename .= $extension;
-+    if (!($filename = module_invoke_all('create_datastream_filename', $datastream))) {
++    $call = module_invoke_all('create_datastream_filename', $datastream);
++    if (count($call) > 0) {
++      $filename = $call[0];
++    }
++    else {
 +      $filename = $label;
 +      if ($duplicate_extension_position === FALSE) {
 +        $filename .= $extension;

@@ -69,7 +69,7 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
 }
 
 function islandora_datastream_filenamer_create_datastream_filename($datastream) {
-  $s = token_replace(variable_get('islandora_ds_download_filename_pattern'),
+  return token_replace(variable_get('islandora_ds_download_filename_pattern'),
     array('datastream'=>$datastream,
       'fedora' => $datastream->parent),
     array('clear' => TRUE)
