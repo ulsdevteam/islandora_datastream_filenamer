@@ -33,7 +33,7 @@ function islandora_datastream_filenamer_admin_form() {
         '#collapsed' => FALSE,
         'help' => array(
           '#theme' => 'token_tree',
-          '#token_types' => array('dsfilename'),
+          '#token_types' => array('dsfilename', 'fedora'),
         ),
       ),
     ),

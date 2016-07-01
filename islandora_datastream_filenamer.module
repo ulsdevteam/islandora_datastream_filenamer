@@ -24,6 +24,7 @@ function islandora_datastream_filenamer_menu() {
  * Implements hook_token_info().
  */
 function islandora_datastream_filenamer_token_info() {
+  // Datastream tokens.
   $info['types']['dsfilename'] = array(
     'name' => 'Datastream tokens',
     'description' => t("Tokens for islandora relating to datastreams objects."),
@@ -36,9 +37,31 @@ function islandora_datastream_filenamer_token_info() {
     'name' => t("Datastream's ID"),
     'description' => t('Datastream ID.'),
   );
-  $info['tokens']['dsfilename']['label'] = array(
+  $info['tokens']['dsfilename']['ds-label'] = array(
     'name' => t("Datastream's label"),
     'description' => t("Datastream label."),
+  );
+  // Fedora tokens.  (same as what comes with islandora_pathauto)
+  $info['types']['fedora'] = array(
+    'name' => 'Fedora object tokens',
+    'description' => t('Tokens for islandora relating to fedora objects'),
+    'needs-data' => 'fedora',
+  );
+  $info['tokens']['fedora']['pid'] = array(
+    'name' => t('Object PID'),
+    'description' => t('Full PID of object in Fedora repository'),
+  );
+  $info['tokens']['fedora']['label'] = array(
+    'name' => t('Object label'),
+    'description' => t('Fedora object label'),
+  );
+  $info['tokens']['fedora']['shortpid'] = array(
+    'name' => t('Short PID'),
+    'description' => t('Fedora object pid without namespace'),
+  );
+  $info['tokens']['fedora']['namespace'] = array(
+    'name' => t('Namespace'),
+    'description' => t('Fedora object namespace'),
   );
   return $info;
 }
@@ -47,7 +70,7 @@ function islandora_datastream_filenamer_token_info() {
  * Implements hook_tokens().
  */
 function islandora_datastream_filenamer_tokens($type, $tokens, array $data = array(), array $options = array()) {
-  if ($type == 'dsfilename' && !empty($data['datastream'])) {
+  if (($type == 'dsfilename' || $type == 'fedora') && !empty($data['datastream'])) {
     $datastream = $data['datastream'];
     $replacements = array();
     foreach ($tokens as $name => $original) {
@@ -58,8 +81,22 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
         if ($name == 'id') {
           $replacements[$original] = $datastream->id;
         }
-        if ($name == 'label') {
+        if ($name == 'ds-label') {
           $replacements[$original] = $datastream->label;
+        }
+        if ($name == 'pid') {
+          $replacements[$original] = $datastream->parent->id;
+        }
+        if ($name == 'shortpid') {
+          $temp = explode(':', $datastream->parent->id, 2);
+          $replacements[$original] = $temp[1];
+        }
+        if ($name == 'namespace') {
+          $temp = explode(':', $datastream->parent->id, 2);
+          $replacements[$original] = $temp[0];
+        }
+        if ($name == 'label') {
+          $replacements[$original] = $datastream->parent->label;
         }
       }
     }
