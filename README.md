@@ -1,9 +1,11 @@
 # islandora_datastream_filenamer
 
-Copyright 2015 (c) University of Pittsburgh
+Copyright 2016 (c) University of Pittsburgh
 
 Licensed under GPL 2 or better.
 
+
+## Install:
 
 This module needs a patch to be applied to the core islandora module. The required patch "0001-added-module_invoke_all-call-to-create_datastream_fi.patch" is included as a file in this module.  To apply the patch file:
 
