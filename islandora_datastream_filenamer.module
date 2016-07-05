@@ -22,55 +22,49 @@ function islandora_datastream_filenamer_menu() {
 
 /**
  * Implements hook_token_info().
+ *
+ * Contains the 'fedora' tokens that are part of islandora_pathauto.
  */
 function islandora_datastream_filenamer_token_info() {
-  // Datastream tokens.
-  $info['types']['dsfilename'] = array(
-    'name' => 'Datastream tokens',
-    'description' => t("Tokens for islandora relating to datastreams objects."),
+  return array(
+    'types' => array(
+      'dsfilename' => array(
+        'name' => 'Datastream tokens',
+        'description' => t("Tokens for islandora relating to datastreams objects."),),
+    ),
+    'tokens' => array(
+      'dsfilename' => array(
+        'fileextension' => array(
+          'name' => t("Extension from Datastream's Mimetype"),
+          'description' => t("File extension derived from mimetype."),),
+        'id' => array(
+          'name' => t("Datastream's ID"),
+          'description' => t('Datastream ID.'),),
+        'ds-label' => array(
+          'name' => t("Datastream's label"),
+          'description' => t("Datastream label."),),
+        'pid' => array(
+          'name' => t('Fedora object PID'),
+          'description' => t('Full PID of object in Fedora repository.'),),
+        'label' => array(
+          'name' => t('Fedora object label'),
+          'description' => t('Fedora object label.'),),
+        'shortpid' => array(
+          'name' => t('Fedora short PID'),
+          'description' => t('Fedora object pid without namespace.'),),
+        'namespace' => array(
+          'name' => t('Fedora object namespace'),
+          'description' => t('Fedora object namespace.'),),
+      ),
+    ),
   );
-  $info['tokens']['dsfilename']['fileextension'] = array(
-    'name' => t("Extension from Datastream's Mimetype"),
-    'description' => t("File extension derived from mimetype."),
-  );
-  $info['tokens']['dsfilename']['id'] = array(
-    'name' => t("Datastream's ID"),
-    'description' => t('Datastream ID.'),
-  );
-  $info['tokens']['dsfilename']['ds-label'] = array(
-    'name' => t("Datastream's label"),
-    'description' => t("Datastream label."),
-  );
-  // Fedora tokens.  (same as what comes with islandora_pathauto)
-  $info['types']['fedora'] = array(
-    'name' => 'Fedora object tokens',
-    'description' => t('Tokens for islandora relating to fedora objects'),
-    'needs-data' => 'fedora',
-  );
-  $info['tokens']['fedora']['pid'] = array(
-    'name' => t('Object PID'),
-    'description' => t('Full PID of object in Fedora repository'),
-  );
-  $info['tokens']['fedora']['label'] = array(
-    'name' => t('Object label'),
-    'description' => t('Fedora object label'),
-  );
-  $info['tokens']['fedora']['shortpid'] = array(
-    'name' => t('Short PID'),
-    'description' => t('Fedora object pid without namespace'),
-  );
-  $info['tokens']['fedora']['namespace'] = array(
-    'name' => t('Namespace'),
-    'description' => t('Fedora object namespace'),
-  );
-  return $info;
 }
 
 /**
  * Implements hook_tokens().
  */
 function islandora_datastream_filenamer_tokens($type, $tokens, array $data = array(), array $options = array()) {
-  if (($type == 'dsfilename' || $type == 'fedora') && !empty($data['datastream'])) {
+  if ($type == 'dsfilename' && is_object($data['datastream'])) {
     $datastream = $data['datastream'];
     $replacements = array();
     foreach ($tokens as $name => $original) {
@@ -107,8 +101,8 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
 
 function islandora_datastream_filenamer_create_datastream_filename($datastream) {
   return token_replace(variable_get('islandora_ds_download_filename_pattern'),
-    array('datastream'=>$datastream,
-      'fedora' => $datastream->parent),
+    array('datastream'=>$datastream),
     array('clear' => TRUE)
   );
 }
+
