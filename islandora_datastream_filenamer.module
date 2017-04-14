@@ -30,31 +30,39 @@ function islandora_datastream_filenamer_token_info() {
     'types' => array(
       'dsfilename' => array(
         'name' => 'Datastream tokens',
-        'description' => t("Tokens for islandora relating to datastreams objects."),),
+        'description' => t("Tokens for islandora relating to datastreams objects.")
+      ),
     ),
     'tokens' => array(
       'dsfilename' => array(
         'fileextension' => array(
           'name' => t("Extension from Datastream's Mimetype"),
-          'description' => t("File extension derived from mimetype."),),
+          'description' => t("File extension derived from mimetype.")
+        ),
         'id' => array(
           'name' => t("Datastream's ID"),
-          'description' => t('Datastream ID.'),),
+          'description' => t('Datastream ID.')
+        ),
         'ds-label' => array(
           'name' => t("Datastream's label"),
-          'description' => t("Datastream label."),),
+          'description' => t("Datastream label.")
+        ),
         'pid' => array(
           'name' => t('Fedora object PID'),
-          'description' => t('Full PID of object in Fedora repository.'),),
+          'description' => t('Full PID of object in Fedora repository.')
+        ),
         'label' => array(
           'name' => t('Fedora object label'),
-          'description' => t('Fedora object label.'),),
+          'description' => t('Fedora object label.')
+        ),
         'shortpid' => array(
           'name' => t('Fedora short PID'),
-          'description' => t('Fedora object pid without namespace.'),),
+          'description' => t('Fedora object pid without namespace.')
+        ),
         'namespace' => array(
           'name' => t('Fedora object namespace'),
-          'description' => t('Fedora object namespace.'),),
+          'description' => t('Fedora object namespace.')
+        ),
       ),
     ),
   );
@@ -101,7 +109,7 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
 
 function islandora_datastream_filenamer_create_datastream_filename($datastream) {
   return token_replace(variable_get('islandora_ds_download_filename_pattern'),
-    array('datastream'=>$datastream),
+    array('datastream' => $datastream),
     array('clear' => TRUE)
   );
 }
