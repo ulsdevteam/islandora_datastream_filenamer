@@ -25,6 +25,7 @@ function islandora_datastream_filenamer_admin_form() {
         '#title' => t('Datastream download filename pattern'),
         '#description' => t('Optionally control the filenames assigned to datastream downloads.  Filename naming pattern should end with the file extension or [dsfilename:extension].'),
         '#default_value' => variable_get('islandora_ds_download_filename_pattern'),
+        '#maxlength' => 255,
       ),
       'token_help' => array(
         '#title' => t('Replacement patterns'),
@@ -70,3 +71,4 @@ function islandora_datastream_filenamer_admin_form_submit(array $form, array &$f
       break;
   }
 }
+
