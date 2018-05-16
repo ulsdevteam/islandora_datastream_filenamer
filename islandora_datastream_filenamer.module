@@ -108,10 +108,10 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
 function islandora_datastream_filenamer_datastream_filename_alter(&$filename, $datastream) {
   $pattern = variable_get('islandora_ds_download_filename_pattern', FALSE);
   if ($pattern) {
-    $filename = token_replace($pattern,
+    $filename = urlencode(token_replace($pattern,
       array('datastream' => $datastream),
       array('clear' => TRUE)
-    );
+    ));
   }
 }
 
