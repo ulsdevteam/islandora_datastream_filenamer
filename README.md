@@ -24,7 +24,7 @@ Any special characters that can not be used for a filename are replaced with a "
 
 If the module is enabled but no configuration is provided, datastream file names will be unaffected by this module.
 
-Other modules may also modify downloadable datastream file names. To find out if any other modules are doing so, you can use the following drush command: `drush hook datastream_filename_alter`
+Other modules may also modify downloadable datastream file names. To find out if any other modules are doing so, you can use the following drush command: `drush hook islandora_datastream_filename_alter`
 
 ## Author / License
 

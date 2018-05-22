@@ -100,12 +100,12 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
 }
 
 /**
- * Implements hook_datastream_filename_alter().
+ * Implements hook_islandora_datastream_filename_alter().
  *
  * Replaces a downloadable datastream filename based on a user-supplied pattern
  * which may contain tokens defined by this or other modules.
  */
-function islandora_datastream_filenamer_datastream_filename_alter(&$filename, $datastream) {
+function islandora_datastream_filenamer_islandora_datastream_filename_alter(&$filename, $datastream) {
   $pattern = variable_get('islandora_ds_download_filename_pattern', FALSE);
   if ($pattern) {
     $filename = urlencode(token_replace($pattern,
