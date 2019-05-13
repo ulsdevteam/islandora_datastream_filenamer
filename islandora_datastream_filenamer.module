@@ -114,3 +114,9 @@ function islandora_datastream_filenamer_create_datastream_filename($datastream) 
   );
 }
 
+/**
+ * Implements hook_islandora_datastream_filename_alter().
+ */
+function islandora_datastream_filenamer_islandora_datastream_filename_alter(&$filename, AbstractDatastream $datastream) {
+  $filename = islandora_datastream_filenamer_create_datastream_filename($datastream);
+}
