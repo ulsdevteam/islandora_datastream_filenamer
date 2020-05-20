@@ -6,7 +6,7 @@ Install as usual, see [this](https://drupal.org/documentation/install/modules-th
 
 ### Usage
 
-Configure the filename tokens at admin/islandora/tools/islandora_datastream_filenamer (user needs to have "Administer Site Configuration" permission).  Select any of the tokens to create the filename pattern.  Any of the tokens can be used, but a section pertaining to Fedora Datastreams contains tokens that can be replaced with the specific values from the datastream or the object that the datastream belongs to.  These contain: Datastream's ID [dsfilename:id], Datastream's label [dsfilename:ds-label], Extension from Datastream's Mimetype [dsfilename:fileextension], Fedora object PID [dsfilename:pid], Fedora object label [dsfilename:label], Fedora object namespace [dsfilename:namespace], Fedora short PID [dsfilename:shortpid].
+Configure the filename tokens at admin/islandora/tools/islandora_datastream_filenamer (user needs to have "Administer Site Configuration" permission).  Select any of the tokens to create the filename pattern.  Any of the tokens can be used, but a section pertaining to Fedora Datastreams contains tokens that can be replaced with the specific values from the datastream. These contain: Datastream's ID [dsfilename:id], Datastream's label [dsfilename:label] and Extension from Datastream's Mimetype [dsfilename:fileextension]. Other tokens, such as of the object the datastream belong to, can also be used.
 
 The filename pattern can contain any separation characters (that are legal in a filename) such as:
 **[dsfilename:id]_[dsfilename:label].[dsfilename:fileextension]** results in filenames like: 

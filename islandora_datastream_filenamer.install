@@ -11,3 +11,21 @@
 function islandora_datastream_filenamer_uninstall() {
   variable_del('islandora_ds_download_filename_pattern');
 }
+
+/**
+ * Rename the tokens in the filename pattern to the correct tokens.
+ */
+function islandora_datastream_filenamer_update_7001() {
+  $pattern = variable_get('islandora_ds_download_filename_pattern');
+
+  $tokens = array(
+    '[dsfilename:pid]' => '[fedora:pid]',
+    '[dsfilename:label]' => '[fedora:label]',
+    '[dsfilename:namespace]' => '[fedora:namespace]',
+    '[dsfilename:shortpid]' => '[fedora:shortpid]',
+    '[dsfilename:ds-label]' => '[dsfilename:label]',
+  );
+  $pattern = str_replace(array_keys($tokens), array_values($tokens), $pattern);
+
+  variable_set('islandora_ds_download_filename_pattern', $pattern);
+}
