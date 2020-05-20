@@ -43,25 +43,9 @@ function islandora_datastream_filenamer_token_info() {
           'name' => t("Datastream's ID"),
           'description' => t('Datastream ID.')
         ),
-        'ds-label' => array(
+        'label' => array(
           'name' => t("Datastream's label"),
           'description' => t("Datastream label.")
-        ),
-        'pid' => array(
-          'name' => t('Fedora object PID'),
-          'description' => t('Full PID of object in Fedora repository.')
-        ),
-        'label' => array(
-          'name' => t('Fedora object label'),
-          'description' => t('Fedora object label.')
-        ),
-        'shortpid' => array(
-          'name' => t('Fedora short PID'),
-          'description' => t('Fedora object pid without namespace.')
-        ),
-        'namespace' => array(
-          'name' => t('Fedora object namespace'),
-          'description' => t('Fedora object namespace.')
         ),
       ),
     ),
@@ -76,29 +60,15 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
     $datastream = $data['datastream'];
     $replacements = array();
     foreach ($tokens as $name => $original) {
-      if ($name == 'fileextension') {
-        $replacements[$original] = islandora_get_extension_for_mimetype($datastream->mimetype);
-      }
       if ($datastream) {
+        if ($name == 'fileextension') {
+          $replacements[$original] = islandora_get_extension_for_mimetype($datastream->mimetype);
+        }
         if ($name == 'id') {
           $replacements[$original] = $datastream->id;
         }
-        if ($name == 'ds-label') {
-          $replacements[$original] = $datastream->label;
-        }
-        if ($name == 'pid') {
-          $replacements[$original] = $datastream->parent->id;
-        }
-        if ($name == 'shortpid') {
-          $temp = explode(':', $datastream->parent->id, 2);
-          $replacements[$original] = $temp[1];
-        }
-        if ($name == 'namespace') {
-          $temp = explode(':', $datastream->parent->id, 2);
-          $replacements[$original] = $temp[0];
-        }
         if ($name == 'label') {
-          $replacements[$original] = $datastream->parent->label;
+          $replacements[$original] = $datastream->label;
         }
       }
     }
@@ -108,10 +78,20 @@ function islandora_datastream_filenamer_tokens($type, $tokens, array $data = arr
 }
 
 function islandora_datastream_filenamer_create_datastream_filename($datastream) {
-  return token_replace(variable_get('islandora_ds_download_filename_pattern'),
-    array('datastream' => $datastream),
-    array('clear' => TRUE)
+  $filename = token_replace(variable_get('islandora_ds_download_filename_pattern'),
+    array(
+      'datastream' => $datastream,
+      'fedora' => $datastream->parent,
+    ),
+    array(
+      'clear' => TRUE,
+    )
   );
+
+  // Decode any entities.
+  $filename = decode_entities($filename);
+
+  return $filename;
 }
 
 /**
